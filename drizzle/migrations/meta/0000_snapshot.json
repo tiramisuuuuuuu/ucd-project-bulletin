@@ -1,0 +1,197 @@
+{
+  "id": "9823da99-f676-4b45-9e5f-2a281861c78f",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.bikes": {
+      "name": "bikes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bike_image_url": {
+          "name": "bike_image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dropoff_location": {
+          "name": "dropoff_location",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dropoff_image_url": {
+          "name": "dropoff_image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reserved": {
+          "name": "reserved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "donation_status": {
+          "name": "donation_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'incomplete'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "bikes_id_unique": {
+          "name": "bikes_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pending_donations": {
+      "name": "pending_donations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bike_id": {
+          "name": "bike_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pending_donations_user_id_users_id_fk": {
+          "name": "pending_donations_user_id_users_id_fk",
+          "tableFrom": "pending_donations",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pending_donations_bike_id_bikes_id_fk": {
+          "name": "pending_donations_bike_id_bikes_id_fk",
+          "tableFrom": "pending_donations",
+          "tableTo": "bikes",
+          "columnsFrom": [
+            "bike_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "pending_donations_id_unique": {
+          "name": "pending_donations_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "reserved_bike_id": {
+          "name": "reserved_bike_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_reserved_bike_id_bikes_id_fk": {
+          "name": "users_reserved_bike_id_bikes_id_fk",
+          "tableFrom": "users",
+          "tableTo": "bikes",
+          "columnsFrom": [
+            "reserved_bike_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_id_unique": {
+          "name": "users_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
