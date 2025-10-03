@@ -1,25 +1,24 @@
 CREATE TABLE "bikes" (
-	"id" integer PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"description" text,
 	"bike_image_url" text,
 	"dropoff_location" text,
 	"dropoff_image_url" text,
 	"reserved" boolean DEFAULT false,
-	"donation_status" text DEFAULT 'incomplete',
-	CONSTRAINT "bikes_id_unique" UNIQUE("id")
+	"donation_status" text DEFAULT 'incomplete'
 );
 --> statement-breakpoint
 CREATE TABLE "pending_donations" (
-	"id" integer PRIMARY KEY NOT NULL,
-	"user_id" integer,
-	"bike_id" integer,
-	CONSTRAINT "pending_donations_id_unique" UNIQUE("id")
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid,
+	"bike_id" uuid
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
-	"id" integer PRIMARY KEY NOT NULL,
-	"reserved_bike_id" integer,
-	CONSTRAINT "users_id_unique" UNIQUE("id")
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"email" text,
+	"reserved_bike_id" uuid,
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 ALTER TABLE "pending_donations" ADD CONSTRAINT "pending_donations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
