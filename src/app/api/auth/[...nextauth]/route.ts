@@ -15,6 +15,16 @@ export const authOptions: NextAuthOptions = {
         strategy: "jwt",
     },
     callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                const arr = await db.select()
+                    .from(users)
+                    .where(eq(users.email, user.email!));
+                
+                token.id = arr[0].id;
+            }
+            return token;
+        },
         async signIn({ user }) {
             if (!user.email) return false;
 
@@ -22,13 +32,13 @@ export const authOptions: NextAuthOptions = {
                 .from(users)
                 .where(eq(users.email, user.email));
 
-            if (!existing_user) {
+            if (existing_user.length == 0) {
                 await db.insert(users)
                     .values({
                         email: user.email
                     });
             }
-
+            
             return true;
         },
   },

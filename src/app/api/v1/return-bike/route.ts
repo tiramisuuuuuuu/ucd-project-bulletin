@@ -1,6 +1,6 @@
 import { db } from "@/db/db";
 import { bikes, users } from "@/db/schema";
-import { zUpdateBikeRequest } from "@/types/api/bikes";
+import { zUpdateBikeRequest } from "@/types/api/Bikes";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,7 +16,7 @@ export async function PUT(req: NextRequest) {
     
     const { bike_id } = arr[0];
 
-    const validatedData = zUpdateBikeRequest.safeParse(req);
+    const validatedData = zUpdateBikeRequest.safeParse(await req.json());
     
     if (!validatedData.success) {
         return new NextResponse(

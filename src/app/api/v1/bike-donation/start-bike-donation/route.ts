@@ -1,12 +1,12 @@
 import { db } from "@/db/db";
 import { bikes, pendingDonations } from "@/db/schema";
-import { zCreateBikeRequest } from "@/types/api/bikes";
+import { zCreateBikeRequest } from "@/types/api/Bikes";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     const user_id = req.headers.get("x-user-id")!;
 
-    const validatedData = zCreateBikeRequest.safeParse(req);
+    const validatedData = zCreateBikeRequest.safeParse(await req.json());
 
     if (!validatedData.success) {
         return new NextResponse(

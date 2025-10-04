@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "./db/db";
-import { users } from "./db/schema";
-import { eq } from "drizzle-orm";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-    if (token?.email) {
-        const user = await db.select()
-            .from(users)
-            .where(eq(users.email, token.email));
-
+    if (token?.id) {
         const requestHeaders = new Headers(req.headers);
-        requestHeaders.set("x-user-id", user[0].id);
+        requestHeaders.set("x-user-id", token.id.toString());
 
         return NextResponse.next({
             request: {
