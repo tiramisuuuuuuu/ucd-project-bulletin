@@ -11,7 +11,6 @@ interface CreateBikeDonationRequest {
 export function CreateBikeDonation(data: CreateBikeDonationRequest) {
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    console.log(data)
 
     useEffect(() => {
         fetch('/api/v1/bike-donation/start-bike-donation', {
