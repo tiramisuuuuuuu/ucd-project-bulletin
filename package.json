@@ -10,6 +10,7 @@
     "migrate": "npx drizzle-kit migrate"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
     "@types/next-auth": "^3.13.0",
     "antd": "^5.27.4",
     "dotenv": "^17.2.3",

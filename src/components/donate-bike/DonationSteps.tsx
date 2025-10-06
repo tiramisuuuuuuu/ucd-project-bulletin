@@ -1,5 +1,6 @@
 import Step1 from './Step1';
 import StepsWithContent from '../ui/Steps';
+import Step2 from './Step2';
 
 const steps = [
   {
@@ -8,7 +9,7 @@ const steps = [
   },
   {
     title: 'Second',
-    content: 'Second-content',
+    content: <Step2 />,
   },
   {
     title: 'Last',
