@@ -43,7 +43,6 @@ export default function MultipleUpload({ setSupabaseFilePaths } : MultipleUpload
   return (
     <>
       <Upload
-        // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
         customRequest={async ({ file, onSuccess, onError}) => {
           const formData = new FormData();
           formData.append("file", file);
@@ -74,7 +73,7 @@ export default function MultipleUpload({ setSupabaseFilePaths } : MultipleUpload
         onPreview={handlePreview}
         onChange={handleChange}
       >
-        {fileList.length >= 8 ? null : uploadButton}
+        {fileList.length >= 3 ? null : uploadButton}
       </Upload>
       {previewImage && (
         <Image

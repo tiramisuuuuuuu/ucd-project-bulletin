@@ -1,4 +1,4 @@
-import StandardText from "../ui/StandardText";
+import StandardText from "@/components/ui/StandardText";
 
 export default function Step1() {
     return (

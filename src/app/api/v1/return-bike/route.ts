@@ -1,5 +1,6 @@
 import { db } from "@/db/db";
 import { bikes, users } from "@/db/schema";
+import { makeImagePublic } from "@/lib/publish-images";
 import { zUpdateBikeRequest } from "@/types/api/Bikes";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -39,6 +40,10 @@ export async function PUT(req: NextRequest) {
 
 
     if (bike_id) {
+        parse.dropoff_image = await Promise.all(
+            parse.dropoff_image?.map(async (supabase_file_path) => await makeImagePublic(supabase_file_path) ?? '') ?? []
+        );
+
         await db.update(bikes)
             .set({
                 reserved: false,

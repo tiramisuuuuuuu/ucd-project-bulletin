@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     const file = formData.get("file") as File;
     const file_path = `${user_id}/${Date.now()}`;
 
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
         .from('private-images')
         .upload(file_path, file);
     
