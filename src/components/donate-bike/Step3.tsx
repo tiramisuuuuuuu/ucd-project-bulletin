@@ -1,4 +1,4 @@
-import { Form, FormInstance, Input, Select } from "antd";
+import { Form, FormInstance, Input, Select, UploadFile } from "antd";
 import MultipleUpload from "@/components/ui/MultipleUpload";
 import { useEffect, useState } from "react";
 import StandardText from "@/components/ui/StandardText";
@@ -14,11 +14,13 @@ interface Step3Props {
 }
 
 export default function Step3({ form } : Step3Props) {
-    const [supabase_file_paths, setSupabaseFilePaths] = useState<string[]>([]);
-
-    useEffect(() => {
-        form.setFieldsValue({ "Dropoff Image": supabase_file_paths });
-    }, [supabase_file_paths]);
+    const [fileList, setFileList] = useState<UploadFile[]>(form.getFieldValue("Dropoff Uploads") ?? [])
+    
+    function updateFileList(fileList: UploadFile[]) {
+        setFileList(fileList);
+        form.setFieldsValue({ "Dropoff Uploads": fileList });
+        form.setFieldsValue({ "Dropoff Image": fileList.map((file: UploadFile) => file.response?.supabase_file_path ?? '') });
+    };
 
     return (
         <div className="bg-white text-left px-7 py-10 flex flex-col gap-y-10">
@@ -40,7 +42,7 @@ export default function Step3({ form } : Step3Props) {
                 </Form.Item>
                 
                 <Form.Item label="Dropoff image (please have the bike and recognizable surroundings as the subject)" name="Dropoff Image" rules={[{ required: true }]}>
-                    <MultipleUpload setSupabaseFilePaths={setSupabaseFilePaths} />
+                    <MultipleUpload fileList={fileList} updateFileList={updateFileList} />
                 </Form.Item>
 
                 <Form.Item

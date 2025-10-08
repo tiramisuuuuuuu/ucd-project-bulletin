@@ -14,13 +14,13 @@ const getBase64 = (file: FileType): Promise<string> =>
   });
 
 interface MultipleUploadProps {
-  setSupabaseFilePaths: Dispatch<SetStateAction<string[]>>;
+  fileList: UploadFile[];
+  updateFileList: (fileList: UploadFile[]) => void;
 }
 
-export default function MultipleUpload({ setSupabaseFilePaths } : MultipleUploadProps) {
+export default function MultipleUpload({ fileList, updateFileList } : MultipleUploadProps) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -32,7 +32,7 @@ export default function MultipleUpload({ setSupabaseFilePaths } : MultipleUpload
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+    updateFileList(newFileList);
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -56,16 +56,11 @@ export default function MultipleUpload({ setSupabaseFilePaths } : MultipleUpload
               if (data.error) {
                 throw new Error(data.error);
               }
-              setSupabaseFilePaths(prev => [...prev, data.supabase_file_path]);
               onSuccess && onSuccess({ url: data.temporary_url, supabase_file_path: data.supabase_file_path }, file);
             })
             .catch(error => {
               onError && onError(error);
             });
-        }}
-
-        onRemove={(file) => {
-          setSupabaseFilePaths(prev => prev.filter((file_path) => file_path!=file.response.supabase_file_path))
         }}
 
         listType="picture-card"
