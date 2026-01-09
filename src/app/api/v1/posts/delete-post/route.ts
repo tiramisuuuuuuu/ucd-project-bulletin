@@ -1,18 +1,17 @@
 import { db } from "@/db/db";
-import { bikes, pendingDonations } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { posts } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
     req: NextRequest, 
     { params }: { params: { id: string } }
 ) {
-    await db.delete(bikes)
-        .where(eq(bikes.id, params.id));
+    const user_id = req.headers.get("x-user-id")!;
 
-    await db.delete(pendingDonations)
-        .where(eq(pendingDonations.bike, params.id));
-    
+    await db.delete(posts)
+        .where(and(eq(posts.id, params.id), eq(posts.user_id, user_id)));
+
     return new NextResponse(
         JSON.stringify("Successfully deleted"), 
         {

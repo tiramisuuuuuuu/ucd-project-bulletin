@@ -1,11 +1,11 @@
 {
-  "id": "366bce8d-c6c7-4d7b-873e-55b6a2b3a352",
+  "id": "0be9affd-a2aa-4042-825c-7714ce86f7d5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.bikes": {
-      "name": "bikes",
+    "public.posts": {
+      "name": "posts",
       "schema": "",
       "columns": {
         "id": {
@@ -14,6 +14,18 @@
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subtitle": {
+          "name": "subtitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -21,100 +33,53 @@
           "primaryKey": false,
           "notNull": false
         },
-        "bike_image_url": {
-          "name": "bike_image_url",
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "images": {
+          "name": "images",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contactInfo": {
+          "name": "contactInfo",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "dropoff_location": {
-          "name": "dropoff_location",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "dropoff_image_url": {
-          "name": "dropoff_image_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "reserved": {
-          "name": "reserved",
-          "type": "boolean",
+        "clicks": {
+          "name": "clicks",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": false
+          "default": 0
         },
-        "donation_status": {
-          "name": "donation_status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'incomplete'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pending_donations": {
-      "name": "pending_donations",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "user_id": {
-          "name": "user_id",
+        "userId": {
+          "name": "userId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
-        "bike_id": {
-          "name": "bike_id",
-          "type": "uuid",
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "pending_donations_user_id_users_id_fk": {
-          "name": "pending_donations_user_id_users_id_fk",
-          "tableFrom": "pending_donations",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pending_donations_bike_id_bikes_id_fk": {
-          "name": "pending_donations_bike_id_bikes_id_fk",
-          "tableFrom": "pending_donations",
-          "tableTo": "bikes",
-          "columnsFrom": [
-            "bike_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -132,35 +97,33 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "email": {
           "name": "email",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "reserved_bike_id": {
-          "name": "reserved_bike_id",
-          "type": "uuid",
+        "profileImage": {
+          "name": "profileImage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tagline": {
+          "name": "tagline",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "users_reserved_bike_id_bikes_id_fk": {
-          "name": "users_reserved_bike_id_bikes_id_fk",
-          "tableFrom": "users",
-          "tableTo": "bikes",
-          "columnsFrom": [
-            "reserved_bike_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_email_unique": {

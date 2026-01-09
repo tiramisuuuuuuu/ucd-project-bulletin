@@ -2,12 +2,16 @@ import Step1 from '@/components/donate-bike/Step1';
 import StepsWithContent from '@/components/ui/StepsWithContent';
 import Step2 from '@/components/donate-bike/Step2';
 import { useState } from 'react';
-import { Button, Form, message } from 'antd';
+import { Button, Form } from 'antd';
 import Step3 from '@/components/donate-bike/Step3';
+import { PostDetail } from '@/types/Posts';
+import { useAtom } from 'jotai';
+import { userAtom } from '@/lib/atoms';
 
 export default function DonationSteps() {
   const [current, setCurrent] = useState(0);
-  const [extendForm, setExtendForm] = useState(false);
+  const [post, setPost] = useState<PostDetail | null>(null);
+  const [user, _] = useAtom(userAtom);
 
   const next = () => {
     setCurrent(current + 1);
@@ -21,62 +25,66 @@ export default function DonationSteps() {
 
   const steps = [
     {
-      title: 'Instructions',
-      content: <Step1 />,
+      title: 'Details',
+      content: <Step1 form={form} />,
     },
     {
-      title: 'Upload bike details',
-      content: <Step2 form={form} setExtendForm={setExtendForm} />,
+      title: 'Preview',
+      content: <Step2 post={post} />,
     },
     {
-      title: 'Save and continue at dropoff',
-      content: 'Last-content',
-    },
-    {
-      title: 'Upload dropoff details',
+      title: 'Submitting',
       content: <Step3 form={form} />,
-    },
-    {
-      title: 'Submit',
-      content: 'Submit-page',
     },
   ];
 
-  const handleSubmit = async () => {
-    form.submit();
+  const handleNext = async () => {
+    //form.submit();
     if (await form.validateFields()) {
+      setPost({
+        title: form.getFieldValue('title') ?? '',
+        subtitle: form.getFieldValue('subtitle') ?? '',
+        description: form.getFieldValue('description') ?? '',
+        tags: form.getFieldValue('tags') ?? [],
+        images: form.getFieldValue('images') ?? [],
+        contact_info: form.getFieldValue('conatct_info') ?? '',
+        clicks: 0,
+        created_at: new Date(),
+        updated_at: null,
+        name: user?.name ?? null,
+        profile_image: user?.profile_image ?? null,
+        tagline: user?.tagline ?? null,
+      })
       next();
     }
   }
 
+  // const handleSubmit = async () => {
+  //   //form.submit();
+  //   if (await form.validateFields()) {
+  //     next();
+  //   }
+  // }
+
   return (
     <StepsWithContent
-      steps={extendForm ? 
-        steps.filter((step, idx) => idx !== 2) 
-        : 
-        steps.filter((step, idx) => idx !== 3 && idx !== 4)
-      }
+      steps={steps}
       current={current}
       prev={prev}
       nextButton={
         <>
           {current === 0 ? (
-            <Button type="primary" onClick={() => next()}>
-              Get Started
+            <Button type="primary" onClick={handleNext}>
+              Preview Post
             </Button>
             ) 
             :
-            current < steps.length - 1 && (
-              <Button type="primary" onClick={handleSubmit}>
-                Next
+            current === 1 && (
+              <Button type="primary" onClick={() => next()}>
+                Submit
               </Button>
             )
           }
-          {current === steps.length - 1 && (
-            <Button type="primary" onClick={() => message.success('Processing complete!')}>
-              Done
-            </Button>
-          )}
         </>
       }
     />

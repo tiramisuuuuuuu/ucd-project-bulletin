@@ -1,13 +1,78 @@
+import { Form, FormInstance, Input, UploadFile } from "antd";
+import MultipleUpload from "@/components/ui/MultipleUpload";
+import { useState } from "react";
 import StandardText from "@/components/ui/StandardText";
+import Tags from "../ui/Tags";
 
-export default function Step1() {
+interface Step1Props {
+    form: FormInstance
+}
+
+export default function Step1({ form } : Step1Props) {
+    const [fileList, setFileList] = useState<UploadFile[]>(form.getFieldValue("image uploads") ?? [])
+    const [tags, setTags] = useState<string[]>(form.getFieldValue("tags") ?? ['Web Developer', 'Graphic Designer', 'AI/ML Engineer'])
+
+    function updateFileList(fileList: UploadFile[]) {
+        setFileList(fileList);
+        form.setFieldsValue({ "image uploads": fileList });
+        form.setFieldsValue({ "images": fileList.map((file: UploadFile) => file.response?.supabase_file_path ?? '') });
+    };
+
+    function updateTags(newTags: string[]) {
+        setTags(newTags);
+        form.setFieldsValue({ "tags": newTags });
+    };
+
     return (
-        <div className="w-full text-left px-7 py-10 bg-white">
-            <StandardText level={3}>Instructions</StandardText>
-            <div className="mt-10 flex flex-col gap-5 text-black">
-                <p>1. Upload a photo of the bike, add a description of the model, and select a dropoff location to lock bike at</p>
-                <p>2. Submit bike and bike lock to AggieWheelShare system only AT or AFTER dropoff time!</p>
-            </div>
+        <div className="bg-white text-left px-7 py-10 flex flex-col gap-y-10">
+            <StandardText level={3}>Create your post</StandardText>
+            <Form
+                form={form}
+                variant='filled'
+                style={{ maxWidth: '75%', textAlign: 'left' }}
+                initialValues={{ variant: 'filled' }}
+                className="flex flex-col gap-y-10"
+            >
+                <Form.Item
+                    label="Post Title"
+                    name="title"
+                    rules={[{ required: true }]}
+                >
+                    <Input showCount maxLength={100} />
+                </Form.Item>
+
+                <Form.Item
+                    label="Post Subtitle"
+                    name="subtitle"
+                >
+                    <Input showCount maxLength={150} />
+                </Form.Item>
+                
+                <Form.Item
+                    label="Description"
+                    name="description"
+                >
+                    <Input.TextArea placeholder="Long-form description of your project. Perfect place to outline timelines, motivations, etc" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Looking for"
+                    name="tags"
+                >
+                    <Tags tags={tags} setTags={updateTags} />
+                </Form.Item>
+
+                <Form.Item label="Attachments (images)" name="images">
+                    <MultipleUpload fileList={fileList} updateFileList={updateFileList} />
+                </Form.Item>
+
+                <Form.Item
+                    label="Contact Info"
+                    name="contact_info"
+                >
+                    <Input.TextArea  showCount maxLength={200} placeholder="Short message on how you would like to be contacted" />
+                </Form.Item>
+            </Form>
         </div>
     )
 }

@@ -35,7 +35,9 @@ export const authOptions: NextAuthOptions = {
             if (existing_user.length == 0) {
                 await db.insert(users)
                     .values({
-                        email: user.email
+                        email: user.email,
+                        name: user.name,
+                        profile_image: user.image,
                     });
             }
             

@@ -1,12 +1,13 @@
 import { db } from "@/db/db";
-import { bikes, pendingDonations } from "@/db/schema";
-import { zCreateBikeRequest } from "@/types/api/Bikes";
+import { posts } from "@/db/schema";
+import { makeImagePublic } from "@/lib/publish-images";
+import { zPost } from "@/types/api/Posts";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     const user_id = req.headers.get("x-user-id")!;
 
-    const validatedData = zCreateBikeRequest.safeParse(await req.json());
+    const validatedData = zPost.safeParse(await req.json());
 
     if (!validatedData.success) {
         return new NextResponse(
@@ -20,21 +21,18 @@ export async function POST(req: NextRequest) {
 
     const parse = validatedData.data;
 
-    const arr = await db.insert(bikes)
-        .values(parse)
+    const public_images = await Promise.all(
+        parse.images.map(async (supabase_file_path: string) => await makeImagePublic(supabase_file_path) ?? '') ?? []
+    );
+
+    const arr = await db.insert(posts)
+        .values({user_id, ...parse, images: public_images})
         .returning();
 
-    const bike = arr[0]
-    
-    await db.insert(pendingDonations)
-        .values({
-            user: user_id,
-            bike: bike.id
-        })
-        .returning();
+    const post = arr[0]
     
     return new NextResponse(
-        JSON.stringify("Successfully started donation"), 
+        JSON.stringify(post), 
         {
             status: 200,
             headers: { "content-type": "application/json" },
