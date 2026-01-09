@@ -20,8 +20,8 @@ export async function makeImagePublic(supabase_file_path: string) {
         .remove([supabase_file_path]);
 
     const { data } = supabase.storage
-        .from('public')
-        .getPublicUrl('user123/file.png');
+        .from('public-images')
+        .getPublicUrl(supabase_file_path);
 
     return data.publicUrl;
 }
