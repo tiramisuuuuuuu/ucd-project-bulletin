@@ -32,3 +32,12 @@ export const zPost = z.object({
 
 export type Post = z.infer<typeof zPost>;
 
+export const zUserPost = z.object({
+    title: z.string(),
+    subtitle: z.string(),
+    tags: z.array(z.string()),
+    images: z.array(z.string()),
+    contact_info: z.string(),
+    created_at: z.coerce.date(),
+    updated_at: z.coerce.date().nullable(),
+})

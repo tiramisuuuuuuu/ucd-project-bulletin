@@ -2,11 +2,12 @@ import Step1 from '@/components/donate-bike/Step1';
 import StepsWithContent from '@/components/ui/StepsWithContent';
 import Step2 from '@/components/donate-bike/Step2';
 import { useState } from 'react';
-import { Button, Form } from 'antd';
+import { Button, Form, UploadFile } from 'antd';
 import Step3 from '@/components/donate-bike/Step3';
 import { PostDetail } from '@/types/Posts';
 import { useAtom } from 'jotai';
 import { userAtom } from '@/lib/atoms';
+import StandardText from '../ui/StandardText';
 
 export default function DonationSteps() {
   const [current, setCurrent] = useState(0);
@@ -30,7 +31,11 @@ export default function DonationSteps() {
     },
     {
       title: 'Preview',
-      content: <Step2 post={post} />,
+      content:
+        <div className="relative bg-white text-left px-7 py-10 flex flex-col gap-y-10">
+          <StandardText level={3}>Preview your post</StandardText>
+          <Step2 post={post} />  
+        </div>,
     },
     {
       title: 'Submitting',
@@ -39,15 +44,14 @@ export default function DonationSteps() {
   ];
 
   const handleNext = async () => {
-    //form.submit();
     if (await form.validateFields()) {
       setPost({
-        title: form.getFieldValue('title') ?? '',
-        subtitle: form.getFieldValue('subtitle') ?? '',
-        description: form.getFieldValue('description') ?? '',
+        title: form.getFieldValue('title'),
+        subtitle: form.getFieldValue('subtitle') ?? '(no subtitle)',
+        description: form.getFieldValue('description') ?? '(no description)',
         tags: form.getFieldValue('tags') ?? [],
-        images: form.getFieldValue('images') ?? [],
-        contact_info: form.getFieldValue('conatct_info') ?? '',
+        images: form.getFieldValue('image uploads')?.map((file: UploadFile) => file.response?.url ?? '') ?? [],
+        contact_info: form.getFieldValue('contact_info') ?? '(no contact info)',
         clicks: 0,
         created_at: new Date(),
         updated_at: null,
@@ -58,13 +62,6 @@ export default function DonationSteps() {
       next();
     }
   }
-
-  // const handleSubmit = async () => {
-  //   //form.submit();
-  //   if (await form.validateFields()) {
-  //     next();
-  //   }
-  // }
 
   return (
     <StepsWithContent

@@ -1,6 +1,6 @@
 import { Form, FormInstance, Input, UploadFile } from "antd";
 import MultipleUpload from "@/components/ui/MultipleUpload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StandardText from "@/components/ui/StandardText";
 import Tags from "../ui/Tags";
 
@@ -10,7 +10,7 @@ interface Step1Props {
 
 export default function Step1({ form } : Step1Props) {
     const [fileList, setFileList] = useState<UploadFile[]>(form.getFieldValue("image uploads") ?? [])
-    const [tags, setTags] = useState<string[]>(form.getFieldValue("tags") ?? ['Web Developer', 'Graphic Designer', 'AI/ML Engineer'])
+    const [tags, setTags] = useState<string[]>([])
 
     function updateFileList(fileList: UploadFile[]) {
         setFileList(fileList);
@@ -22,6 +22,14 @@ export default function Step1({ form } : Step1Props) {
         setTags(newTags);
         form.setFieldsValue({ "tags": newTags });
     };
+
+    useEffect(() => {
+        if (!form.getFieldValue("tags")) {
+            updateTags(['Web Developer', 'Graphic Designer', 'AI/ML Engineer']);
+        } else {
+            setTags(form.getFieldValue("tags"));
+        }
+    }, [])
 
     return (
         <div className="bg-white text-left px-7 py-10 flex flex-col gap-y-10">

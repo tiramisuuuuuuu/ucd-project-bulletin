@@ -32,7 +32,7 @@ export default function StepsWithContent({ steps, current, prev, nextButton } : 
       <div style={contentStyle}>{steps[current].content}</div>
       <div style={{ marginTop: 24 }}>
         {nextButton}
-        {current > 0 && (
+        {current == 1 && (
           <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
             Previous
           </Button>
