@@ -67,6 +67,7 @@ export default function CreatePostSteps({ prevPost } : CreatePostStepsProps) {
   const handleNext = async () => {
     if (await form.validateFields()) {
       setPost({
+        id: "faux-id",
         title: form.getFieldValue('title'),
         subtitle: form.getFieldValue('subtitle') ?? '(no subtitle)',
         description: form.getFieldValue('description') ?? '(no description)',
