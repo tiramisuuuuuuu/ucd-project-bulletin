@@ -76,7 +76,7 @@ export default function Feed() {
                 {!loading && (
                     feed.length > 0 ?
                         feed.map((post, idx) => 
-                            <Card key={idx} style={{ width: '70%' }} onClick={() => router.push('/post/'+post.id)}>
+                            <Card key={idx} style={{ width: '70%', alignSelf: 'center' }} onClick={() => router.push('/post/'+post.id)}>
                                 <Flex justify="space-between">
                                     <Flex vertical>
                                         <Typography.Title level={4}>{post.title}</Typography.Title>
