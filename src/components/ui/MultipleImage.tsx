@@ -13,8 +13,9 @@ export default function MultipleImage({ images }: MultipleImageProps) {
                     onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
                 }}
             >
-                {images.map((url) => 
+                {images.map((url, idx) => 
                     <Image
+                        key={idx}
                         alt="attachment"
                         width={200}
                         src={url}
