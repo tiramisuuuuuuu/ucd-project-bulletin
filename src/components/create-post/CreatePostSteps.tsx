@@ -1,10 +1,10 @@
-import Step1 from '@/components/donate-bike/Step1';
+import Step1 from '@/components/create-post/Step1';
 import StepsWithContent from '@/components/ui/StepsWithContent';
-import Step2 from '@/components/donate-bike/Step2';
+import Step2 from '@/components/create-post/Step2';
 import { useState } from 'react';
 import { Button, Form, UploadFile } from 'antd';
-import Step3 from '@/components/donate-bike/Step3';
-import { PostDetail } from '@/types/Posts';
+import Step3 from '@/components/create-post/Step3';
+import { PostDetail, zUserPost } from '@/types/Posts';
 import { useAtom } from 'jotai';
 import { userAtom } from '@/lib/atoms';
 import StandardText from '../ui/StandardText';
@@ -13,6 +13,8 @@ export default function DonationSteps() {
   const [current, setCurrent] = useState(0);
   const [post, setPost] = useState<PostDetail | null>(null);
   const [user, _] = useAtom(userAtom);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const next = () => {
     setCurrent(current + 1);
@@ -39,7 +41,7 @@ export default function DonationSteps() {
     },
     {
       title: 'Submitting',
-      content: <Step3 form={form} />,
+      content: <Step3 loading={loading} error={error} />,
     },
   ];
 
@@ -63,6 +65,32 @@ export default function DonationSteps() {
     }
   }
 
+  const handleSubmit = async () => {
+    next();
+    
+    const post = {
+      title: form.getFieldValue('title'),
+      subtitle: form.getFieldValue('subtitle') ?? '',
+      description: form.getFieldValue('description') ?? '',
+      tags: form.getFieldValue('tags') ?? [],
+      images: form.getFieldValue('images') ?? [],
+      contact_info: form.getFieldValue('contact_info') ?? '',
+    };
+
+    const res = await fetch('/api/v1/posts/create-post', {
+      method: 'POST',
+      body: JSON.stringify(post),
+    });
+
+    const validatedData = zUserPost.safeParse(await res.json());
+    if (!validatedData.success) {
+      console.log(validatedData.error)
+      setError(true);
+    }
+
+    setLoading(false);
+  }
+
   return (
     <StepsWithContent
       steps={steps}
@@ -77,7 +105,7 @@ export default function DonationSteps() {
             ) 
             :
             current === 1 && (
-              <Button type="primary" onClick={() => next()}>
+              <Button type="primary" onClick={handleSubmit}>
                 Submit
               </Button>
             )
