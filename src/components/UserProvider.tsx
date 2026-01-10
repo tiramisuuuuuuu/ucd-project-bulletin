@@ -15,21 +15,22 @@ export default function UserProvider({ children }: { children: React.ReactNode }
 
     useEffect(() => {
         async function fetchUser() {
-        if (!session) {
+            if (!session) {
+                router.push('/');
+                setLoading(false);
+                return;
+            }
+
+            const res = await fetch('/api/v1/users/get-user');
+            const validatedData = zUser.safeParse(await res.json());
+            if (!validatedData.success) {
+                await signOut();
+                router.push('/')
+                return;
+            }
+
+            setUser(validatedData.data);
             setLoading(false);
-            return;
-        }
-
-        const res = await fetch('/api/v1/users/get-user');
-        const validatedData = zUser.safeParse(await res.json());
-        if (!validatedData.success) {
-            await signOut();
-            router.push('/')
-            return;
-        }
-
-        setUser(validatedData.data);
-        setLoading(false);
         }
 
         if (status !== "loading") {

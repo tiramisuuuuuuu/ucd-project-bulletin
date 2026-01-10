@@ -4,7 +4,7 @@ import { zUser } from "@/types/api/Users";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
+export async function PUT(
     req: NextRequest, 
 ) {
     const user_id = req.headers.get("x-user-id")!;
