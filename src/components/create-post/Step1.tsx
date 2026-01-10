@@ -5,12 +5,12 @@ import StandardText from "@/components/ui/StandardText";
 import Tags from "../ui/Tags";
 
 interface Step1Props {
-    form: FormInstance
+    form: FormInstance;
 }
 
 export default function Step1({ form } : Step1Props) {
-    const [fileList, setFileList] = useState<UploadFile[]>(form.getFieldValue("image uploads") ?? [])
-    const [tags, setTags] = useState<string[]>([])
+    const [fileList, setFileList] = useState<UploadFile[]>(form.getFieldValue("image uploads") ?? []);
+    const [tags, setTags] = useState<string[]>([]);
 
     function updateFileList(fileList: UploadFile[]) {
         setFileList(fileList);

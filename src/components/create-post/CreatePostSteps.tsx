@@ -1,7 +1,7 @@
 import Step1 from '@/components/create-post/Step1';
 import StepsWithContent from '@/components/ui/StepsWithContent';
 import Step2 from '@/components/create-post/Step2';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form, UploadFile } from 'antd';
 import Step3 from '@/components/create-post/Step3';
 import { PostDetail, zUserPost } from '@/types/Posts';
@@ -9,7 +9,11 @@ import { useAtom } from 'jotai';
 import { userAtom } from '@/lib/atoms';
 import StandardText from '../ui/StandardText';
 
-export default function DonationSteps() {
+interface CreatePostStepsProps {
+  prevPost?: PostDetail | null;
+}
+
+export default function CreatePostSteps({ prevPost } : CreatePostStepsProps) {
   const [current, setCurrent] = useState(0);
   const [post, setPost] = useState<PostDetail | null>(null);
   const [user, _] = useAtom(userAtom);
@@ -25,6 +29,21 @@ export default function DonationSteps() {
   };
 
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (prevPost) {
+      form.setFieldsValue({ 
+        "title": prevPost.title, 
+        "subtitle": prevPost.subtitle, 
+        "description": prevPost.description,
+        "tags": prevPost.tags,
+        "contact_info": prevPost.contact_info,
+        "clicks": prevPost.clicks,
+        "created_at": prevPost.created_at,
+        "updated_at": new Date(),
+      });
+    }
+  }, [prevPost])
 
   const steps = [
     {
@@ -54,9 +73,9 @@ export default function DonationSteps() {
         tags: form.getFieldValue('tags') ?? [],
         images: form.getFieldValue('image uploads')?.map((file: UploadFile) => file.response?.url ?? '') ?? [],
         contact_info: form.getFieldValue('contact_info') ?? '(no contact info)',
-        clicks: 0,
-        created_at: new Date(),
-        updated_at: null,
+        clicks: form.getFieldValue('clicks') ?? 0,
+        created_at: form.getFieldValue('created_at') ?? new Date(),
+        updated_at: form.getFieldValue('updated_at') ?? null,
         name: user?.name ?? null,
         profile_image: user?.profile_image ?? null,
         tagline: user?.tagline ?? null,
@@ -77,8 +96,9 @@ export default function DonationSteps() {
       contact_info: form.getFieldValue('contact_info') ?? '',
     };
 
-    const res = await fetch('/api/v1/posts/create-post', {
-      method: 'POST',
+    const url = prevPost ? '/api/v1/posts/update-post/'+prevPost.id : '/api/v1/posts/create-post';
+    const res = await fetch(url, {
+      method: prevPost ? 'PUT' : 'POST',
       body: JSON.stringify(post),
     });
 

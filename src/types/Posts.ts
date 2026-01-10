@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const zPostDetail = z.object({
+    id: z.string(),
     title: z.string(),
     subtitle: z.string(),
     description: z.string(),

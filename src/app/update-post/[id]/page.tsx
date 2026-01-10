@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import Step2 from "@/components/create-post/Step2";
+import CreatePostSteps from "@/components/create-post/CreatePostSteps";
 import { PostDetail, zPostDetail } from "@/types/Posts";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 export default function Page() {
     const params = useParams();
@@ -29,6 +30,8 @@ export default function Page() {
     }, []);
 
     return (
-        <Step2 post={post} />
-    );
+        <div>
+            <CreatePostSteps prevPost={post} />
+        </div>
+    )
 }
