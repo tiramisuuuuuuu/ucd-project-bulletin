@@ -46,7 +46,7 @@ export default function UserContent() {
                 {!loading && (
                     feed.length > 0 ?
                         feed.map((post, idx) => 
-                            <div key={idx} className="flex flex-row gap-5">
+                            <div key={idx} className="w-full flex flex-row gap-5 justify-center">
                                 <Card style={{ width: '70%' }} onClick={() => router.push('/post/'+post.id)}>
                                     <Flex justify="space-between">
                                         <Flex vertical>

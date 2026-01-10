@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { zUser } from "@/types/Users";
 import { userAtom } from "@/lib/atoms";
+import { Spin } from "antd";
 
 export default function UserProvider({ children }: { children: React.ReactNode }) {
     const [_, setUser] = useAtom(userAtom);
@@ -41,10 +42,10 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     if (loading) {
         return (
         <>
-            <button>Loading</button>
+            <Spin size="large" />
         </>
         )
     }
 
-    return <>{children}</>
+    return <div className="p-10">{children}</div>
 }
