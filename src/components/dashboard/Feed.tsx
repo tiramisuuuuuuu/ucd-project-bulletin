@@ -2,16 +2,20 @@
 
 import { Post, zPostArray } from "@/types/Posts";
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Card, Empty, Flex, Spin, Tag, Typography } from "antd";
+import { Avatar, Card, Divider, Empty, Flex, Spin, Tag, Typography } from "antd";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import CheckboxList from "../ui/CheckboxList";
 
 
 
 export default function Feed() {
+    const [allData, setAllData] = useState<Post[]>([]);
     const [feed, setFeed] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
+    const [allTags, setAllTags] = useState<string[]>([]);
+    const [checkedList, setCheckedList] = useState<string[]>([]);
     const router = useRouter();
 
     useEffect(() => {
@@ -24,17 +28,51 @@ export default function Feed() {
                 return;
             }
     
-            setFeed(validatedData.data);
+            setAllData(validatedData.data);
             setLoading(false);
+
+            const tags = new Set<string>();
+            validatedData.data.forEach(post => {
+                post.tags.forEach(tag => tags.add(tag));
+            })
+            setAllTags([...tags]);
+            setCheckedList([...tags]);
         }
     
        fetchFeed()
     }, []);
 
+    useEffect(() => {
+        if (checkedList.length == allTags.length) {
+            setFeed(allData);
+            return;
+        }
+        setFeed(allData.filter(post => {
+            for (const tag of post.tags) {
+                if (checkedList.includes(tag)) {
+                    return true;
+                }
+            }
+            return false;
+        }));
+    }, [allData, checkedList]);
+
     return (
-        <div className="w-full">
-            <Flex vertical className="w-full" gap="small">
-                {loading && <Spin size="large" />}
+        <div className="relative w-full flex flex-row">
+            {loading && <Spin size="large" />}
+
+            {!loading && 
+                <div>
+                    <Card style={{ width: 300, position: 'sticky', top: 0 }}>
+                        <Tag color="cyan">Sorted by date</Tag>
+                        <Divider />
+                        <Typography.Title level={5}>Filter</Typography.Title>
+                        <CheckboxList plainOptions={allTags} defaultCheckedList={allTags} updateCheckedList={setCheckedList} />
+                    </Card>
+                </div>
+            }
+
+            <Flex vertical className="flex-grow" gap="small">
                 {!loading && (
                     feed.length > 0 ?
                         feed.map((post, idx) => 
@@ -44,7 +82,7 @@ export default function Feed() {
                                         <Typography.Title level={4}>{post.title}</Typography.Title>
                                         <Typography.Text>{post.subtitle}</Typography.Text>
                                         <Flex gap="small">
-                                            <Typography.Text type="secondary">Looking for:</Typography.Text>
+                                            {post.tags.length > 0 && <Typography.Text type="secondary">Looking for:</Typography.Text>}
                                             {post.tags.map((tag, idx) =>
                                                 <div key={idx}>
                                                     <Tag color="magenta">
@@ -52,7 +90,7 @@ export default function Feed() {
                                                     </Tag>
                                                 </div>
                                             )}
-                                            <Typography.Text type="secondary">{post.clicks}</Typography.Text>
+                                            <Typography.Text type="secondary">👀 {post.clicks}</Typography.Text>
                                             <Typography.Text type="secondary">{format(post.updated_at ?? post.created_at, "MMMM d")}</Typography.Text>
                                         </Flex>
                                     </Flex>

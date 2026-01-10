@@ -1,7 +1,7 @@
 'use client';
 
 import { Post, zPostArray } from "@/types/Posts";
-import { EditOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteTwoTone, EditTwoTone, UserOutlined } from "@ant-design/icons";
 import { Avatar, Card, Empty, Flex, Spin, Tag, Typography } from "antd";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -73,7 +73,8 @@ export default function UserContent() {
                                         </Flex>
                                     </Flex>
                                 </Card>
-                                <EditOutlined onClick={() => router.push('/update-post/'+post.id)} className="text-blue-500 text-xl" />
+                                <EditTwoTone twoToneColor="blue" onClick={() => router.push('/update-post/'+post.id)} className="text-xl" />
+                                <DeleteTwoTone twoToneColor="red" className="text-xl" />
                             </div>
                         )
                         :
