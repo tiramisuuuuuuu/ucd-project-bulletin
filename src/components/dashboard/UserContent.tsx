@@ -2,7 +2,7 @@
 
 import { Post, zPostArray } from "@/types/Posts";
 import { DeleteTwoTone, EditTwoTone, UserOutlined } from "@ant-design/icons";
-import { Avatar, Card, Empty, Flex, Spin, Tag, Typography } from "antd";
+import { Avatar, Card, Empty, Flex, Popconfirm, Spin, Tag, Typography } from "antd";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 export default function UserContent() {
     const [feed, setFeed] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
+    const [refetchCount, setRefetchCount] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -28,8 +29,15 @@ export default function UserContent() {
             setLoading(false);
         }
     
-       fetchFeed()
-    }, []);
+        fetchFeed();
+    }, [refetchCount]);
+
+    async function handleDelete(id: string) {
+        await fetch('/api/v1/posts/delete-post/'+id, {
+            method: 'DELETE',
+        });
+        setRefetchCount(prev => prev+1);
+    }
 
     return (
         <div className="w-full">
@@ -45,7 +53,7 @@ export default function UserContent() {
                                             <Typography.Title level={4}>{post.title}</Typography.Title>
                                             <Typography.Text>{post.subtitle}</Typography.Text>
                                             <Flex gap="small">
-                                                <Typography.Text type="secondary">Looking for:</Typography.Text>
+                                                {post.tags.length > 0 && <Typography.Text type="secondary">Looking for:</Typography.Text>}
                                                 {post.tags.map((tag, idx) =>
                                                     <div key={idx}>
                                                         <Tag color="magenta">
@@ -53,7 +61,7 @@ export default function UserContent() {
                                                         </Tag>
                                                     </div>
                                                 )}
-                                                <Typography.Text type="secondary">{post.clicks}</Typography.Text>
+                                                <Typography.Text type="secondary">👀 {post.clicks}</Typography.Text>
                                                 <Typography.Text type="secondary">{format(post.updated_at ?? post.created_at, "MMMM d")}</Typography.Text>
                                             </Flex>
                                         </Flex>
@@ -74,7 +82,15 @@ export default function UserContent() {
                                     </Flex>
                                 </Card>
                                 <EditTwoTone twoToneColor="blue" onClick={() => router.push('/update-post/'+post.id)} className="text-xl" />
-                                <DeleteTwoTone twoToneColor="red" className="text-xl" />
+                                <Popconfirm
+                                    title="Delete this post?"
+                                    description="This action can not be revoked."
+                                    onConfirm={() => handleDelete(post.id)}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <DeleteTwoTone twoToneColor="red" className="text-xl" />
+                                </Popconfirm>
                             </div>
                         )
                         :
