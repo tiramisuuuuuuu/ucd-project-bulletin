@@ -23,7 +23,13 @@ export async function GET() {
         JSON.stringify(arr), 
         {
             status: 200,
-            headers: { "content-type": "application/json" },
+            headers: {
+                "content-type": "application/json",
+                "cache-control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+                "pragma": "no-cache",
+                "expires": "0",
+                "surrogate-control": "no-store",
+            },
         }
     );
 }
