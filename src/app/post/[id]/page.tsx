@@ -2,6 +2,7 @@
 
 import Step2 from "@/components/create-post/Step2";
 import { PostDetail, zPostDetail } from "@/types/Posts";
+import { Spin } from "antd";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -29,6 +30,9 @@ export default function Page() {
     }, []);
 
     return (
-        <Step2 post={post} />
+        <div className="w-full flex flex-row justify-center">
+            {loading && <Spin size="large" />}
+            <Step2 post={post} />
+        </div>
     );
 }

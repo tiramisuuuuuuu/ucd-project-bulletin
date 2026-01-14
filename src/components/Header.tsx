@@ -9,13 +9,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { zUser } from "@/types/Users";
 import Image from "next/image";
-import { Arvo, Comforter_Brush, Fascinate, Halant, Libre_Baskerville, Ubuntu } from 'next/font/google';
 import { UserOutlined } from "@ant-design/icons";
+import { TitleFont } from "@/lib/fonts";
 
-const LibreBaskerville = Comforter_Brush({
-    weight: ['400'],
-    subsets: ['latin']
-})
+
 
 export default function Header() {
     const [user, setUser] = useAtom(userAtom);
@@ -83,7 +80,7 @@ export default function Header() {
                     width={100}
                     height={100}
                 />
-                <Typography.Title level={2} className={`ml-[-30px] ${LibreBaskerville.className}`}>UCD Project Bulletin</Typography.Title>
+                <Typography.Title level={2} className={`ml-[-30px] ${TitleFont.className}`}>UCD Project Bulletin</Typography.Title>
             </div>
             
             {user?.email && 

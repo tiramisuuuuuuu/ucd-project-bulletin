@@ -3,6 +3,7 @@ import "./globals.css";
 
 import AuthProvider from "@/components/AuthProvider";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "My App",
@@ -21,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   {children}
                 </div>
               </div>
-              <p className="">Thank you for visiting UCD Project Bulletin</p>
+              <Footer />
             </div>
           </UserProvider>
         </AuthProvider>

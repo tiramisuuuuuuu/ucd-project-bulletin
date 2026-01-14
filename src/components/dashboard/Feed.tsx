@@ -58,7 +58,7 @@ export default function Feed() {
     }, [allData, checkedList]);
 
     return (
-        <div className="relative w-full flex flex-row justify-center">
+        <div className="relative w-full flex flex-row justify-center gap-7">
             {loading && <Spin size="large" />}
 
             {!loading && 
