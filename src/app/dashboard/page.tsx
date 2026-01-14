@@ -1,6 +1,6 @@
 "use client";
 
-import { FloatButton, Tabs } from 'antd';
+import { FloatButton, Tabs, Tooltip } from 'antd';
 import type { TabsProps } from 'antd';
 import Feed from '@/components/dashboard/Feed';
 import UserContent from '@/components/dashboard/UserContent';
@@ -27,13 +27,15 @@ export default function Page() {
   return (
     <div className="w-full min-h-full">
       <Tabs defaultActiveKey="1" items={items}  />
-      <FloatButton
-        icon={<PlusOutlined />}
-        description="POST"
-        shape="square"
-        style={{ insetInlineEnd: 24, width: 50, height: 50 }}
-        onClick={() => router.push('/create-post')}
-      />
+      <Tooltip title="Create a POST">
+        <FloatButton
+          icon={<PlusOutlined />}
+          shape="circle"
+          onClick={() => router.push('/create-post')}
+          type="primary"
+          style={{ insetInlineEnd: 50 }}
+        />
+      </Tooltip>
     </div>
   );
 }

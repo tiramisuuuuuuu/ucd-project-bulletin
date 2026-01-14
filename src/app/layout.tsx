@@ -3,6 +3,7 @@ import "./globals.css";
 
 import AuthProvider from "@/components/AuthProvider";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "My App",
@@ -11,11 +12,18 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50">
+      <body>
         <AuthProvider>
           <UserProvider>
-            <Header />
-            {children}
+            <div className="flex flex-col justify-between min-h-screen">
+              <div>
+                <Header />
+                <div className="w-full px-12 pb-10">
+                  {children}
+                </div>
+              </div>
+              <Footer />
+            </div>
           </UserProvider>
         </AuthProvider>
       </body>

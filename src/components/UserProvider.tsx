@@ -47,5 +47,5 @@ export default function UserProvider({ children }: { children: React.ReactNode }
         )
     }
 
-    return <div className="p-10">{children}</div>
+    return <div>{children}</div>
 }

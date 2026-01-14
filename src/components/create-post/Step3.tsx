@@ -1,4 +1,4 @@
-import { Button, Flex, Result, Spin } from "antd";
+import { Button, Flex, Result, Spin, Typography } from "antd";
 import { useRouter } from "next/navigation";
 
 
@@ -13,9 +13,9 @@ export default function Step3({ loading, error } : Step3Props) {
     return (
         <div className="bg-white text-left px-7 py-10 flex flex-col gap-y-10">
             {loading ?
-                <Flex vertical>
+                <Flex vertical align="center" gap="large">
                     <Spin size="large" />
-                    <p>Submitting</p>
+                    <Typography.Text>Submitting</Typography.Text>
                 </Flex>
                 : <Result
                     status={error ? "error" : "success"}

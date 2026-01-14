@@ -1,10 +1,9 @@
 import { Avatar, Card, Divider, Flex, Tag, Typography } from "antd";
-import StandardText from "@/components/ui/StandardText";
 import { PostDetail } from "@/types/Posts";
-import Profile from "../ui/Profile";
 import { format } from "date-fns";
 import MultipleImage from "../ui/MultipleImage";
 import { UserOutlined } from "@ant-design/icons";
+import RichText from "./RichText";
 
 interface Step2Props {
     post: PostDetail | null
@@ -37,9 +36,7 @@ export default function Step2({ post } : Step2Props) {
 
                 <Divider />
                 
-                <Typography.Paragraph>
-                    {post.description}
-                </Typography.Paragraph>
+                <RichText text={post.description} />
                 <Divider />
                 <Typography.Title level={2}>Attachments</Typography.Title>
                 {post.images.length === 0 ? 
@@ -84,7 +81,11 @@ export default function Step2({ post } : Step2Props) {
 
                     <Divider>Contact me via</Divider>
 
-                    <p>{post.contact_info}</p>
+                    {post.contact_info.split('\n').map((textBlock, idx) =>
+                        <p key={idx}>
+                            {textBlock}
+                        </p>
+                    )}
                 </Card>
             </div>
         </div>
