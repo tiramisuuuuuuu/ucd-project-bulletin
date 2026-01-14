@@ -1,7 +1,7 @@
 "use client";
 
 import { userAtom } from "@/lib/atoms";
-import { Badge, Button, Dropdown, Form, Input, MenuProps, Modal, Typography } from "antd";
+import { Avatar, Badge, Button, Dropdown, Form, Input, MenuProps, Modal, Typography } from "antd";
 import { useAtom } from "jotai";
 import Profile from "./ui/Profile";
 import { signOut } from "next-auth/react";
@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { zUser } from "@/types/Users";
 import Image from "next/image";
 import { Arvo, Comforter_Brush, Fascinate, Halant, Libre_Baskerville, Ubuntu } from 'next/font/google';
+import { UserOutlined } from "@ant-design/icons";
 
 const LibreBaskerville = Comforter_Brush({
     weight: ['400'],
@@ -96,7 +97,12 @@ export default function Header() {
             }
 
             <Modal
-                title="Update Your Profile"
+                title={
+                    <div className="flex flex-row items-center gap-4">
+                        <Avatar size="small" icon={<UserOutlined />} />
+                        <p>Update Your Profile</p>
+                    </div>
+                }
                 closable={{ 'aria-label': 'Custom Close Button' }}
                 open={open}
                 onOk={handleSubmit}
@@ -105,9 +111,9 @@ export default function Header() {
                 <Form
                     form={form}
                     variant='filled'
-                    style={{ maxWidth: '75%', textAlign: 'left' }}
+                    style={{ maxWidth: '75%', textAlign: 'left', paddingTop: 30 }}
                     initialValues={{ variant: 'filled' }}
-                    className="flex flex-col gap-y-10"
+                    className="flex flex-col gap-y-2"
                 >
                     <Form.Item
                         label="Display Name"

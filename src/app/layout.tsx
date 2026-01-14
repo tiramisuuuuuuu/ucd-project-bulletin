@@ -11,16 +11,20 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="flex flex-col justify-between min-h-screen">
+      <body>
         <AuthProvider>
           <UserProvider>
-            <Header />
-            <div className="w-full px-12 pb-10">
-              {children}
+            <div className="flex flex-col justify-between min-h-screen">
+              <div>
+                <Header />
+                <div className="w-full px-12 pb-10">
+                  {children}
+                </div>
+              </div>
+              <p className="">Thank you for visiting UCD Project Bulletin</p>
             </div>
           </UserProvider>
         </AuthProvider>
-        <p className="">Thank you for visiting UCD Project Bulletin</p>
       </body>
     </html>
   );
