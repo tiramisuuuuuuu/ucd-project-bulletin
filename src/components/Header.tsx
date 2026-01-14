@@ -75,7 +75,7 @@ export default function Header() {
 
     return (
         <div className="w-full pt-10 pb-7 px-12 mt-[-50px] mb-7 bg-white flex flex-row justify-between items-end shadow-lg">
-            <div className="flex flex-row justify-between items-end cursor-pointer" onClick={() => router.push('/dashboard')}>
+            <div className="flex flex-row justify-between items-end cursor-pointer" onClick={() => router.push('/')}>
                 <Image
                     src="/upb-logo.PNG"
                     alt="logo"
