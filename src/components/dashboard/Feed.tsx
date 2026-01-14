@@ -58,12 +58,12 @@ export default function Feed() {
     }, [allData, checkedList]);
 
     return (
-        <div className="relative w-full flex flex-row">
+        <div className="relative w-full flex flex-row justify-center">
             {loading && <Spin size="large" />}
 
             {!loading && 
                 <div>
-                    <Card style={{ width: 300, position: 'sticky', top: 0 }}>
+                    <Card style={{ width: 300 }}>
                         <Tag color="cyan">Sorted by date</Tag>
                         <Divider />
                         <Typography.Title level={5}>Filter</Typography.Title>
@@ -72,11 +72,11 @@ export default function Feed() {
                 </div>
             }
 
-            <Flex vertical className="flex-grow" gap="small">
+            <Flex vertical className="w-[70%]" gap="small">
                 {!loading && (
                     feed.length > 0 ?
                         feed.map((post, idx) => 
-                            <Card key={idx} style={{ width: '70%', alignSelf: 'center' }} onClick={() => router.push('/post/'+post.id)}>
+                            <Card key={idx} className="w-full cursor-pointer" onClick={() => router.push('/post/'+post.id)}>
                                 <Flex justify="space-between">
                                     <Flex vertical>
                                         <Typography.Title level={4}>{post.title}</Typography.Title>

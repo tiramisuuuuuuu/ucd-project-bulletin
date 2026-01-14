@@ -8,7 +8,13 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { zUser } from "@/types/Users";
+import Image from "next/image";
+import { Arvo, Comforter_Brush, Fascinate, Halant, Libre_Baskerville, Ubuntu } from 'next/font/google';
 
+const LibreBaskerville = Comforter_Brush({
+    weight: ['400'],
+    subsets: ['latin']
+})
 
 export default function Header() {
     const [user, setUser] = useAtom(userAtom);
@@ -68,12 +74,20 @@ export default function Header() {
     }
 
     return (
-        <div className="w-full p-7 px-12 flex flex-row justify-between align-middle">
-            <Typography.Title level={2}>UCD Project Bulletin</Typography.Title>
+        <div className="w-full pt-10 pb-7 px-12 mt-[-50px] mb-7 bg-white flex flex-row justify-between items-end shadow-lg">
+            <div className="flex flex-row justify-between items-end cursor-pointer" onClick={() => router.push('/dashboard')}>
+                <Image
+                    src="/upb-logo.PNG"
+                    alt="logo"
+                    width={100}
+                    height={100}
+                />
+                <Typography.Title level={2} className={`ml-[-30px] ${LibreBaskerville.className}`}>UCD Project Bulletin</Typography.Title>
+            </div>
             
             {user?.email && 
                 <Dropdown menu={{ items }} placement="bottom" arrow>
-                    <Button className="my-auto" type="link">
+                    <Button className="mb-4" type="link">
                         <Badge count={incompleteProfile ? 1 : 0}>
                             <Profile />
                         </Badge>
