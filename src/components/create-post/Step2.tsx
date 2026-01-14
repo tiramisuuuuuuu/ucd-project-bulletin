@@ -81,7 +81,11 @@ export default function Step2({ post } : Step2Props) {
 
                     <Divider>Contact me via</Divider>
 
-                    <p>{post.contact_info}</p>
+                    {post.contact_info.split('\n').map((textBlock, idx) =>
+                        <p key={idx}>
+                            {textBlock}
+                        </p>
+                    )}
                 </Card>
             </div>
         </div>
